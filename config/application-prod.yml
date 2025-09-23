@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      minimum-idle: 3
+      idle-timeout: 0
+      maximum-pool-size: 15
+      pool-name: local-pool-${spring.application.name}
+      max-lifetime: 1800000
+springdoc:
+  api-docs:
+    enabled: true
+server:
+  http2:
+    enabled: true
+  port: ${PORT}
+  servlet:
+    context-path: /${spring.application.name}
