@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     hikari:
       minimum-idle: 3
       idle-timeout: 0
@@ -16,6 +16,6 @@ springdoc:
 server:
   http2:
     enabled: true
-  port: ${PORT}
+  port: ${SERVER_PORT}
   servlet:
     context-path: /${spring.application.name}

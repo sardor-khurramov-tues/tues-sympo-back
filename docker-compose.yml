@@ -1,0 +1,21 @@
+services:
+
+  postgres:
+    image: postgres:13
+    env_file:
+      - .env
+    ports:
+      - "8911:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+
+  sympo:
+    build: .
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - "8910:8910"
+    volumes:
+      - ./app_files:/app/files

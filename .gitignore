@@ -38,3 +38,6 @@ files/
 logs/
 draft.txt
 config/application-dev.yml
+.env
+app_files/
+postgres_data/
