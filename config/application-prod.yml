@@ -19,3 +19,5 @@ server:
   port: ${SERVER_PORT}
   servlet:
     context-path: /${spring.application.name}
+recaptcha:
+  secret: ${RECAPTCHA_SECRET}
