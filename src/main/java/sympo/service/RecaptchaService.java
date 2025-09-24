@@ -2,13 +2,17 @@ package sympo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import sympo.constant.ResponseType;
 import sympo.exception.CustomBadRequestException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -24,19 +28,24 @@ public class RecaptchaService {
     public void validateToken(String recaptchaToken) {
         String verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
-        Map<String, String> params = new HashMap<>();
-        params.put("secret", recaptchaSecret);
-        params.put("response", recaptchaToken);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("secret", recaptchaSecret);
+        map.add("response", recaptchaToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
         Map<String, Object> googleResponse =
-                restTemplate.postForObject(verifyUrl, params, Map.class);
+                restTemplate.postForObject(verifyUrl, request, Map.class);
 
         if (googleResponse == null || !(Boolean) googleResponse.get("success"))
             throw new CustomBadRequestException(ResponseType.INVALID_RECAPTCHA);
 
-        double score = (Double) googleResponse.get("score");
+        Number score = (Number) googleResponse.get("score");
 
-        if (score < 0.5)
+        if (score.doubleValue() < 0.5)
             throw new CustomBadRequestException(ResponseType.SUSPICIOUS_ACTIVITY_DETECTED);
     }
 
