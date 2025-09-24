@@ -22,8 +22,10 @@ public enum ResponseType {
     GET_PDF_FAILURE(12, "failure on getting pdf file"),
 
     EMAIL_IS_ALREADY_USED(1001, "email is already used"),
+    NO_USER_WITH_THIS_ID(1002, "there is no user with this id"),
 
-    NO_USER_WITH_THIS_ID(1003, "there is no user with this id"),
+    INVALID_RECAPTCHA(2001, "invalid recaptcha"),
+    SUSPICIOUS_ACTIVITY_DETECTED(2002, "Suspicious activity detected"),
 
     BAD_REQUEST(99999, "bad request");
 

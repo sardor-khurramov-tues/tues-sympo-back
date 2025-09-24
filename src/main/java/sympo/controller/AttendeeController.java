@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sympo.constant.Endpoint;
 import sympo.dto.ResponseDto;
 import sympo.service.AttendeeService;
+import sympo.service.RecaptchaService;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -26,9 +27,11 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class AttendeeController {
 
     private final AttendeeService attendeeService;
+    private final RecaptchaService recaptchaService;
 
     @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseDto<Object>> registerAttendee(
+            @RequestPart @Valid @NotBlank @Size(max = 4096) String recaptchaToken,
             @RequestPart @Valid @NotBlank @Email @Size(max = 127) String email,
             @RequestPart @Valid @NotBlank @Size(max = 15) String phone,
             @RequestPart @Valid @NotBlank @Size(max = 63) String firstName,
@@ -43,6 +46,8 @@ public class AttendeeController {
             @RequestPart(required = false) @Valid @Size(max = 2000) String comments,
             @RequestPart @Valid MultipartFile photo
     ) {
+        recaptchaService.validateToken(recaptchaToken);
+
         return attendeeService.register(
                 email,
                 phone,
