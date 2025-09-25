@@ -16,7 +16,7 @@ public enum ResponseType {
     UPLOAD_SIZE_EXCEED(6, "max file size is 5 MB"),
     WRONG_FILE_TYPE(7, "file type is not correct, please use JPEG for images"),
     VALIDATION_ERROR(8, "validation error"),
-
+    HTTP_MEDIA_TYPE_NOT_SUPPORTED(9, "http media type not supported"),
     METHOD_ARGUMENT_TYPE_MISMATCH(10, "method argument type mismatch"),
     SAVE_PDF_FAILURE(11, "failure on saving pdf file"),
     GET_PDF_FAILURE(12, "failure on getting pdf file"),

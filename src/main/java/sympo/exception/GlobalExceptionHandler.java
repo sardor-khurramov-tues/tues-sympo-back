@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import sympo.constant.ResponseType;
 import sympo.dto.ResponseDto;
@@ -122,6 +124,28 @@ public class GlobalExceptionHandler {
         log.error("handleMethodArgumentTypeMismatchException: {}", exception.getMessage());
         return ResponseEntity.badRequest().body(
                 ResponseDto.getInstance(ResponseType.METHOD_ARGUMENT_TYPE_MISMATCH, null)
+        );
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private ResponseEntity<ResponseDto<Object>> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException exception) {
+        log.error("handleHttpMediaTypeNotSupportedException: {}", exception.getMessage());
+        return ResponseEntity.badRequest().body(
+                ResponseDto.getInstance(ResponseType.HTTP_MEDIA_TYPE_NOT_SUPPORTED, null)
+        );
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private ResponseEntity<ResponseDto<Object>> handleMissingServletRequestPartException(MissingServletRequestPartException exception) {
+        log.error("handleMissingServletRequestPartException: {}", exception.getMessage());
+        return ResponseEntity.badRequest().body(
+                new ResponseDto<>(
+                        ResponseType.METHOD_ARGUMENT_NOT_GIVEN.getCode(),
+                        exception.getMessage(),
+                        null
+                )
         );
     }
 
